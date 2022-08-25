@@ -4,6 +4,7 @@ const player2 = document.getElementById("player2"); //the computer is player 2, 
 const winScreen = document.getElementById("win"); //winner screen :)
 const loseScreen = document.getElementById("lose"); //loser screen :(
 const drawScreen = document.getElementById("draw"); //draw screen :|
+const reset = document.getElementById("reset"); //reset button to play again
 
 let yourMove; //this variable is your chosen move
 let computersMove; //this variable is the computer's chosen move
@@ -13,11 +14,7 @@ let randomComputerChoice; //this variable determines the computer's chosen move
 
 //wait until the docuent is loaded before firing the arrow function
 document.addEventListener("DOMContentLoaded", () => {
-  //reset scores
-  yourMove = "";
-  computersMove = "";
-  finalScore = "";
-
+  reset.addEventListener("click", playAgain);
   buttons.forEach((btn) => {
     btn.addEventListener("click", playerChoice);
     btn.classList.remove("hidden");
@@ -48,15 +45,15 @@ function playerChoice() {
     //determine the weight of your move
     switch (selectedMove) {
       case "rock":
-        yourMove = "rock";
+        yourMove = "r";
         break;
 
       case "paper":
-        yourMove = "paper";
+        yourMove = "p";
         break;
 
       case "scissors":
-        yourMove = "scissors";
+        yourMove = "s";
         break;
     }
     //console.log("you used " + yourMove);
@@ -81,62 +78,61 @@ function computerChoice() {
     switch (randomComputerChoice) {
       case 1:
         player2.classList.add("rock");
-        computersMove = "rock";
+        computersMove = "r";
         break;
 
       case 2:
         player2.classList.add("paper");
-        computersMove = "paper";
+        computersMove = "p";
         break;
 
       case 3:
         player2.classList.add("scissors");
-        computersMove = "scissors";
+        computersMove = "s";
         break;
     }
     //console.log("computer used " + computersMove);
   }, 1800); //delay by 1800ms
 }
 
+//calculate the winner of the match
 function determineWinner() {
-  finalScore = `${yourMove + computersMove}`;
+  finalScore = yourMove + computersMove;
   //console.log(finalScore);
 
-  switch (finalScore) {
-    case "rockrock":
-      drawScreen.classList.remove("hidden");
-      break;
-
-    case "rockpaper":
-      loseScreen.classList.remove("hidden");
-      break;
-
-    case "rockscissors":
-      winScreen.classList.remove("hidden");
-      break;
-
-    case "paperrock":
-      winScreen.classList.remove("hidden");
-      break;
-
-    case "paperpaper":
-      drawScreen.classList.remove("hidden");
-      break;
-
-    case "paperscissors":
-      loseScreen.classList.remove("hidden");
-      break;
-
-    case "scissorsrock":
-      loseScreen.classList.remove("hidden");
-      break;
-
-    case "scissorspaper":
-      winScreen.classList.remove("hidden");
-      break;
-
-    case "scissorsscissors":
-      drawScreen.classList.remove("hidden");
-      break;
+  if (finalScore == "rs" || finalScore == "pr" || finalScore == "sp") {
+    //you win
+    winScreen.classList.remove("hidden");
+  } else if (finalScore == "rp" || finalScore == "ps" || finalScore == "sr") {
+    //you lose
+    loseScreen.classList.remove("hidden");
+  } else {
+    //draw
+    drawScreen.classList.remove("hidden");
   }
+
+  reset.classList.remove("hidden");
+}
+
+//reset variables
+function playAgain() {
+  //reset scores
+  yourMove = "";
+  computersMove = "";
+  finalScore = "";
+
+  //remove classes from players
+  player1.className = "player";
+  player2.className = "player";
+
+  //hide elements
+  winScreen.classList.add("hidden");
+  loseScreen.classList.add("hidden");
+  drawScreen.classList.add("hidden");
+  reset.classList.add("hidden");
+
+  //make buttons visible again
+  buttons.forEach((btn) => {
+    btn.classList.remove("hidden");
+  });
 }

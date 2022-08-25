@@ -130,3 +130,15 @@ button.paper {
 button.scissors {
   background-image: url(assets/button_scissors.png);
 }
+
+#reset {
+  font-size: 6vw;
+  cursor: pointer;
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+#reset:hover {
+  transform: translateX(50%) scale(110%);
+}
